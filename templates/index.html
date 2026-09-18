@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Based Pneumonia Detection | Attention-Enhanced CNN</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Top Navigation Header -->
+    <header class="site-header">
+        <div class="container nav-container">
+            <div class="brand">
+                <div class="brand-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                        <path d="M12 5v14"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-title">PneumoVision<span class="brand-accent">AI</span></span>
+                    <span class="brand-badge">Attention-CNN</span>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#upload-section" class="nav-link">Detect</a>
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#about" class="nav-link">About</a>
+            </nav>
+
+            <div class="header-status">
+                <span class="status-indicator"></span>
+                <span class="status-label" id="model-status-badge">AI Model Ready</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="home">
+        <div class="hero-glow"></div>
+        <div class="container hero-container">
+            <div class="hero-content">
+                <div class="hero-pill">
+                    <span class="pill-dot"></span>
+                    <span>Deep Learning for Medical Radiography</span>
+                </div>
+                <h1 class="hero-title">AI-Based Pneumonia Detection</h1>
+                <h2 class="hero-subtitle">Attention-Enhanced CNN Based Chest X-Ray Analysis</h2>
+                <p class="hero-description">
+                    Empowering radiological screening with deep attention mechanics. Our neural network pinpoints pathological lung consolidations and infiltrates in chest radiographs, providing instantaneous binary classification with spatial attention heatmaps.
+                </p>
+                <div class="hero-actions">
+                    <a href="#upload-section" class="btn btn-primary btn-lg">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                        Start Detection
+                    </a>
+                    <a href="#how-it-works" class="btn btn-secondary btn-lg">
+                        Explore Pipeline
+                    </a>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <span class="stat-value">224×224</span>
+                        <span class="stat-label">Resolution</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">CBAM</span>
+                        <span class="stat-label">Attention Logic</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">Grad-CAM</span>
+                        <span class="stat-label">Explainability</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="scan-frame">
+                    <div class="scan-grid"></div>
+                    <div class="scan-laser"></div>
+                    <div class="scan-illustration">
+                        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="xray-demo-svg">
+                            <!-- Ribcage and Lungs Illustration -->
+                            <path d="M100 20 V180" stroke="#38bdf8" stroke-width="3" stroke-dasharray="4 3" opacity="0.4"/>
+                            <!-- Left Lung -->
+                            <path d="M90 45 C70 45 45 65 40 100 C35 130 50 160 85 165 C88 165 90 160 90 145 C90 110 90 70 90 45 Z" fill="rgba(14, 165, 233, 0.12)" stroke="#38bdf8" stroke-width="2"/>
+                            <!-- Right Lung -->
+                            <path d="M110 45 C130 45 155 65 160 100 C165 130 150 160 115 165 C112 165 110 160 110 145 C110 110 110 70 110 45 Z" fill="rgba(14, 165, 233, 0.12)" stroke="#38bdf8" stroke-width="2"/>
+                            <!-- Rib lines -->
+                            <path d="M50 70 Q90 85 90 85" stroke="#38bdf8" stroke-width="1.5" opacity="0.4"/>
+                            <path d="M45 95 Q90 105 90 105" stroke="#38bdf8" stroke-width="1.5" opacity="0.4"/>
+                            <path d="M48 120 Q90 125 90 125" stroke="#38bdf8" stroke-width="1.5" opacity="0.4"/>
+                            <path d="M150 70 Q110 85 110 85" stroke="#38bdf8" stroke-width="1.5" opacity="0.4"/>
+                            <path d="M155 95 Q110 105 110 105" stroke="#38bdf8" stroke-width="1.5" opacity="0.4"/>
+                            <path d="M152 120 Q110 125 110 125" stroke="#38bdf8" stroke-width="1.5" opacity="0.4"/>
+                            <!-- Attention highlight glow -->
+                            <circle cx="65" cy="115" r="22" fill="url(#heatGlow)" opacity="0.75"/>
+                            <defs>
+                                <radialGradient id="heatGlow" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" stop-color="#ef4444" stop-opacity="0.9"/>
+                                    <stop offset="60%" stop-color="#f59e0b" stop-opacity="0.5"/>
+                                    <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+                                </radialGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div class="scan-tag">
+                        <span class="tag-pulse"></span> Attention Gate Active
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Diagnostic Section -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Upload Card Section -->
+            <section class="diagnostic-panel" id="upload-section">
+                <div class="panel-header">
+                    <div class="panel-step">Step 01</div>
+                    <h2 class="panel-title">Chest Radiograph Upload</h2>
+                    <p class="panel-subtitle">Select or drag-and-drop an anterior-posterior (AP) or posteroanterior (PA) chest X-ray.</p>
+                </div>
+
+                <!-- Error Toast Container -->
+                <div id="error-container" class="error-box hidden" role="alert">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    <span id="error-message">Error message</span>
+                    <button type="button" class="btn-close-error" id="btn-close-error" aria-label="Close error">&times;</button>
+                </div>
+
+                <!-- Drag and Drop Dropzone -->
+                <div class="upload-box" id="drop-zone">
+                    <input type="file" id="file-input" class="file-input" accept=".jpg,.jpeg,.png">
+                    
+                    <div class="upload-placeholder" id="upload-placeholder">
+                        <div class="upload-icon-circle">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                        </div>
+                        <h3 class="upload-prompt">Drag & Drop Chest X-Ray Here</h3>
+                        <p class="upload-hint">Supported formats: JPG, JPEG, PNG (Max file size: 16MB)</p>
+                        <button type="button" class="btn btn-outline" id="browse-btn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                            </svg>
+                            Upload Chest X-Ray
+                        </button>
+                    </div>
+
+                    <!-- Image Preview Card (hidden by default) -->
+                    <div class="image-preview-card hidden" id="preview-container">
+                        <div class="preview-media">
+                            <img id="preview-img" src="" alt="Selected Chest X-Ray Preview">
+                        </div>
+                        <div class="preview-info">
+                            <div class="preview-meta">
+                                <div class="file-details">
+                                    <span class="file-name" id="file-name-label">filename.jpg</span>
+                                    <span class="file-size" id="file-size-label">0.0 MB</span>
+                                </div>
+                                <button type="button" class="btn-remove-file" id="btn-remove-file" title="Remove image">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                                    </svg>
+                                    Remove
+                                </button>
+                            </div>
+                            <div class="preview-actions">
+                                <button type="button" class="btn btn-primary btn-lg" id="btn-analyze">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                                    </svg>
+                                    Analyze X-Ray
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading State (hidden by default) -->
+                <div class="loading-state hidden" id="loading-container">
+                    <div class="scanner-anim">
+                        <div class="pulse-ring"></div>
+                        <div class="pulse-ring delay-1"></div>
+                        <div class="pulse-ring delay-2"></div>
+                        <div class="scanner-core">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="loading-title">Analyzing X-ray using Attention-Enhanced CNN...</h3>
+                    <p class="loading-detail">Extracting spatial feature maps and calculating localized lung pathology activation.</p>
+                    <div class="loading-progress-bar">
+                        <div class="progress-bar-fill"></div>
+                    </div>
+                </div>
+
+                <!-- Result Section (hidden by default) -->
+                <div class="result-section hidden" id="result-container">
+                    <div class="result-header">
+                        <div class="panel-step">Step 02</div>
+                        <h2 class="panel-title">Diagnostic Analysis Results</h2>
+                        <p class="panel-subtitle">Attention-Enhanced neural classification and Grad-CAM localized interpretability.</p>
+                    </div>
+
+                    <div class="result-grid">
+                        <!-- Primary Diagnostic Card -->
+                        <div class="result-card primary-result-card" id="prediction-card">
+                            <div class="result-badge-container">
+                                <span class="badge-label">Predicted Condition</span>
+                                <div class="prediction-badge" id="prediction-badge">
+                                    <span class="badge-icon" id="badge-icon"></span>
+                                    <span class="badge-text" id="prediction-text">PNEUMONIA</span>
+                                </div>
+                            </div>
+
+                            <!-- Confidence Meter -->
+                            <div class="confidence-box">
+                                <div class="confidence-header">
+                                    <span class="confidence-title">Model Confidence</span>
+                                    <span class="confidence-value" id="confidence-percentage">0.0%</span>
+                                </div>
+                                <div class="confidence-bar-track">
+                                    <div class="confidence-bar-value" id="confidence-bar"></div>
+                                </div>
+                                <div class="confidence-scale">
+                                    <span>0%</span>
+                                    <span>Decision Threshold (50%)</span>
+                                    <span>100%</span>
+                                </div>
+                            </div>
+
+                            <!-- Diagnostic Explanation -->
+                            <div class="explanation-box">
+                                <div class="explanation-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                                    </svg>
+                                </div>
+                                <div class="explanation-content">
+                                    <h4 class="explanation-title">Clinical Finding Summary</h4>
+                                    <p class="explanation-text" id="result-message">Result description will appear here.</p>
+                                </div>
+                            </div>
+
+                            <!-- Action buttons -->
+                            <div class="result-actions">
+                                <button type="button" class="btn btn-outline" id="btn-reset">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                                        <path d="M3 3v5h5"/>
+                                    </svg>
+                                    Analyze Another X-Ray
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Imagery & Attention Heatmap Card -->
+                        <div class="result-card imagery-card">
+                            <h3 class="imagery-title">Visual Comparison & Localization</h3>
+                            <div class="comparison-row">
+                                <div class="image-box">
+                                    <div class="image-box-header">
+                                        <span class="box-tag">Input Radiograph</span>
+                                    </div>
+                                    <div class="image-frame">
+                                        <img id="result-original-img" src="" alt="Original Uploaded X-Ray">
+                                    </div>
+                                </div>
+
+                                <div class="image-box">
+                                    <div class="image-box-header">
+                                        <span class="box-tag accent">Attention Visualization</span>
+                                    </div>
+                                    <div class="image-frame" id="heatmap-frame">
+                                        <img id="result-heatmap-img" src="" alt="Attention Heatmap Overlay">
+                                        <div class="heatmap-legend">
+                                            <span class="legend-text">Low Attention</span>
+                                            <div class="legend-gradient"></div>
+                                            <span class="legend-text">High Attention</span>
+                                        </div>
+                                    </div>
+                                    <div id="no-heatmap-message" class="no-heatmap-msg hidden">
+                                        <p>Grad-CAM heatmap computation optional or currently unavailable.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="imagery-caption">
+                                <strong>Attention Map Interpretation:</strong> Warmer red and yellow regions denote focal spatial attention where the neural network's convolutional kernels detected opacity, consolidation, or pleural effusion hallmarks.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- How It Works Section -->
+            <section class="info-section" id="how-it-works">
+                <div class="section-heading">
+                    <span class="section-tag">Architecture Workflow</span>
+                    <h2 class="section-title">How It Works</h2>
+                    <p class="section-subtitle">A synchronized end-to-end deep learning pipeline for automated radiograph triage.</p>
+                </div>
+
+                <div class="pipeline-container">
+                    <div class="pipeline-step">
+                        <div class="step-badge">1</div>
+                        <div class="step-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                            </svg>
+                        </div>
+                        <h4 class="step-title">Upload X-Ray</h4>
+                        <p class="step-desc">Radiograph is securely uploaded and validated for resolution and format.</p>
+                    </div>
+
+                    <div class="pipeline-arrow">&rarr;</div>
+
+                    <div class="pipeline-step">
+                        <div class="step-badge">2</div>
+                        <div class="step-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>
+                            </svg>
+                        </div>
+                        <h4 class="step-title">Image Preprocessing</h4>
+                        <p class="step-desc">Resized to 224&times;224, converted to RGB, normalized to [0, 1] tensor scale.</p>
+                    </div>
+
+                    <div class="pipeline-arrow">&rarr;</div>
+
+                    <div class="pipeline-step">
+                        <div class="step-badge">3</div>
+                        <div class="step-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="7"/><polyline points="12 9 12 12 13.5 13.5"/>
+                                <path d="M16.51 17.35l-.35 3.83a2 2 0 0 1-2 1.82H9.83a2 2 0 0 1-2-1.82l-.35-3.83"/>
+                            </svg>
+                        </div>
+                        <h4 class="step-title">Attention-Enhanced CNN</h4>
+                        <p class="step-desc">Convolution layers extract low-level anatomical textures and bone densities.</p>
+                    </div>
+
+                    <div class="pipeline-arrow">&rarr;</div>
+
+                    <div class="pipeline-step">
+                        <div class="step-badge">4</div>
+                        <div class="step-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                            </svg>
+                        </div>
+                        <h4 class="step-title">Feature Extraction</h4>
+                        <p class="step-desc">Spatial & channel attention weights suppress background ribs and highlight parenchymal opacities.</p>
+                    </div>
+
+                    <div class="pipeline-arrow">&rarr;</div>
+
+                    <div class="pipeline-step">
+                        <div class="step-badge">5</div>
+                        <div class="step-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                            </svg>
+                        </div>
+                        <h4 class="step-title">Classification</h4>
+                        <p class="step-desc">Dense sigmoid layer outputs probability score between Normal and Pneumonia.</p>
+                    </div>
+
+                    <div class="pipeline-arrow">&rarr;</div>
+
+                    <div class="pipeline-step">
+                        <div class="step-badge">6</div>
+                        <div class="step-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                        </div>
+                        <h4 class="step-title">Prediction + Confidence</h4>
+                        <p class="step-desc">Delivers categorical prediction and statistical confidence percentage.</p>
+                    </div>
+
+                    <div class="pipeline-arrow">&rarr;</div>
+
+                    <div class="pipeline-step">
+                        <div class="step-badge">7</div>
+                        <div class="step-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+                            </svg>
+                        </div>
+                        <h4 class="step-title">Attention Heatmap</h4>
+                        <p class="step-desc">Grad-CAM produces localized overlay visualizing active diagnostic regions.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section class="info-section" id="about">
+                <div class="section-heading">
+                    <span class="section-tag">Medical & Technical Concepts</span>
+                    <h2 class="section-title">About the Technology</h2>
+                    <p class="section-subtitle">Understanding pneumonia, radiographic diagnosis, and the power of attention mechanisms.</p>
+                </div>
+
+                <div class="about-grid">
+                    <div class="about-card">
+                        <div class="about-icon">🫁</div>
+                        <h3 class="about-title">What is Pneumonia?</h3>
+                        <p class="about-text">
+                            Pneumonia is an acute respiratory infection that inflames the air sacs (alveoli) in one or both lungs. The alveoli can fill with fluid, purulent matter, and cellular debris, causing cough, fever, chills, and impaired gas exchange.
+                        </p>
+                    </div>
+
+                    <div class="about-card">
+                        <div class="about-icon">🔬</div>
+                        <h3 class="about-title">What is a Chest X-Ray?</h3>
+                        <p class="about-text">
+                            A chest radiograph is a non-invasive imaging study using low-dose electromagnetic radiation. Dense structures (bones) appear white, air-filled healthy lungs appear radiolucent (dark), and fluid-filled infected consolidations appear as hazy white or gray opacities.
+                        </p>
+                    </div>
+
+                    <div class="about-card">
+                        <div class="about-icon">🧠</div>
+                        <h3 class="about-title">What is a CNN?</h3>
+                        <p class="about-text">
+                            Convolutional Neural Networks (CNNs) are specialized deep learning models equipped with spatial convolution kernels. They automatically learn hierarchical visual representations—ranging from edges and textures to complex anatomical structures.
+                        </p>
+                    </div>
+
+                    <div class="about-card">
+                        <div class="about-icon">🎯</div>
+                        <h3 class="about-title">What is Attention Mechanism?</h3>
+                        <p class="about-text">
+                            Attention mechanisms dynamically assign non-uniform weights to feature maps, mimicking human visual cognition. Rather than treating all image pixels equally, the network selectively emphasizes informative lung regions while suppressing extraneous noise.
+                        </p>
+                    </div>
+
+                    <div class="about-card about-card-highlight">
+                        <div class="about-icon">⚡</div>
+                        <h3 class="about-title">Why Attention Improves Image Analysis</h3>
+                        <p class="about-text">
+                            In chest radiography, significant portions of the image contain irrelevant artifacts: clavicles, rib shadows, diaphragm, cardiac silhouette, and black background. Attention mechanisms help the network focus specifically on pulmonary parenchyma and subtle alveolar infiltrates, reducing false positives and enhancing interpretability via Grad-CAM heatmaps.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container footer-container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <span class="footer-brand-title">PneumoVisionAI</span>
+                    <span class="footer-badge">Academic AI Project</span>
+                </div>
+                <div class="footer-links">
+                    <a href="#home">Home</a>
+                    <a href="#upload-section">Detect</a>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#about">About</a>
+                </div>
+            </div>
+
+            <div class="footer-disclaimer">
+                <div class="disclaimer-icon">⚠️</div>
+                <div class="disclaimer-text">
+                    <strong>Medical Disclaimer:</strong> This application is intended for educational and research purposes only and is not a substitute for professional medical diagnosis, prognosis, or clinical decision-making. Always seek the advice of a qualified physician or healthcare provider with any questions regarding medical conditions.
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 AI-Based Pneumonia Detection Using Attention-Enhanced CNN. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
