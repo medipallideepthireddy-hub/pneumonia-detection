@@ -182,14 +182,31 @@ document.addEventListener('DOMContentLoaded', () => {
         // Prepare FormData
         const formData = new FormData();
         formData.append('file', selectedFile);
+         const responseText = await response.text();
 
-        try {
-            const response = await fetch('/predict', {
-                method: 'POST',
-                body: formData
-            });
+let data;
 
-            const data = await response.json();
+try {
+    data = JSON.parse(responseText);
+} catch (e) {
+    console.error("Server returned non-JSON:", responseText);
+    throw new Error(
+        `Server returned an invalid response (${response.status}).`
+    );
+}
+
+if (!response.ok) {
+    throw new Error(data.error || 'Server error occurred during analysis.');
+}
+
+            const responseText= await response.text();
+            let data;
+            try {
+            data = JSON.parse(responseText);
+            } catch (e) {}
+            ) {
+                throw new Error('Failed to parse analysis results.');
+            }
 
             if (!response.ok) {
                 throw new Error(data.error || 'Server error occurred during analysis.');
